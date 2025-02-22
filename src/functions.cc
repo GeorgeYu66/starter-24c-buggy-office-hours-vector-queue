@@ -11,6 +11,13 @@ void AddStudent(OfficeHoursQueue& queue, const Student& student) {
   queue.student_queue.back().arrival_order = queue.student_arrival_counter;
   queue.student_arrival_counter += 1;
 
+  if (queue.student_queue.back().attendance_percentage < 0) {
+    queue.student_queue.back().attendance_percentage = 0;
+  }
+  if (queue.student_queue.back().attendance_percentage > 100) {
+    queue.student_queue.back().attendance_percentage = 100;
+  }
+
   unsigned int index = queue.staff_queue.size() - 1;
   while (index > 0) {
     const Student& current = queue.student_queue[index];

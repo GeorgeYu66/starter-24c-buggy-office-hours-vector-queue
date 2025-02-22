@@ -99,7 +99,8 @@ void HelpNextStudent(OfficeHoursQueue& queue) {
   std::uniform_int_distribution<> dist(kRandomMin, kRandomMax);
   int help_time = dist(gen);
 
-  Staff staff = queue.staff_queue[queue.staff_queue.size() - 1];
+  Staff staff = queue.staff_queue[0];
+  queue.staff_queue.erase(queue.staff_queue.begin());
   staff.encounter_count++;
   staff.total_help_time += help_time;
   AddStaff(queue, staff);

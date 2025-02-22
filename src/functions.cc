@@ -18,7 +18,7 @@ void AddStudent(OfficeHoursQueue& queue, const Student& student) {
     queue.student_queue.back().attendance_percentage = 100;
   }
 
-  unsigned int index = queue.staff_queue.size() - 1;
+  unsigned int index = queue.student_queue.size() - 1;
   while (index > 0) {
     const Student& current = queue.student_queue[index];
     const Student& previous = queue.student_queue[index - 1];

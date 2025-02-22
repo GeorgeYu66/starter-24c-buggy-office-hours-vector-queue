@@ -10,6 +10,31 @@ void AddStudent(OfficeHoursQueue& queue, const Student& student) {
   queue.student_queue.push_back(student);
   queue.student_queue.back().arrival_order = queue.student_arrival_counter;
   queue.student_arrival_counter += 1;
+
+  unsigned int index = queue.staff_queue.size() - 1;
+  while (index > 0) {
+    const Student& current = queue.student_queue[index];
+    const Student& previous = queue.student_queue[index - 1];
+
+    if (current.attendance_percentage > previous.attendance_percentage) {
+      Student temp = queue.student_queue[index - 1];
+      queue.student_queue[index - 1] = queue.student_queue[index];
+      queue.student_queue[index] = temp;
+      index--;
+    } else if (current.attendance_percentage ==
+               previous.attendance_percentage) {
+      if (current.arrival_order < previous.arrival_order) {
+        Student temp = queue.student_queue[index - 1];
+        queue.student_queue[index - 1] = queue.student_queue[index];
+        queue.student_queue[index] = temp;
+        index--;
+      } else {
+        break;
+      }
+    } else {
+      break;
+    }
+  }
 }
 
 void AddStaff(OfficeHoursQueue& queue, const Staff& staff) {
@@ -28,7 +53,7 @@ void AddStaff(OfficeHoursQueue& queue, const Staff& staff) {
       queue.staff_queue[index] = temp;
       index--;
     } else if (current.encounter_count == previous.encounter_count) {
-      if (current.arrival_order > previous.arrival_order) {
+      if (current.arrival_order < previous.arrival_order) {
         Staff temp = queue.staff_queue[index - 1];
         queue.staff_queue[index - 1] = queue.staff_queue[index];
         queue.staff_queue[index] = temp;

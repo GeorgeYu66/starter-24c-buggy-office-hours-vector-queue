@@ -14,9 +14,6 @@ void AddStudent(OfficeHoursQueue& queue, const Student& student) {
   if (queue.student_queue.back().attendance_percentage < 0) {
     queue.student_queue.back().attendance_percentage = 0;
   }
-  if (queue.student_queue.back().attendance_percentage > 100) {
-    queue.student_queue.back().attendance_percentage = 100;
-  }
 
   unsigned int index = queue.student_queue.size() - 1;
   while (index > 0) {
@@ -54,17 +51,26 @@ void AddStaff(OfficeHoursQueue& queue, const Staff& staff) {
     const Staff& current = queue.staff_queue[index];
     const Staff& previous = queue.staff_queue[index - 1];
 
-    if (current.encounter_count > previous.encounter_count) {
+    if (current.encounter_count < previous.encounter_count) {
       Staff temp = queue.staff_queue[index - 1];
       queue.staff_queue[index - 1] = queue.staff_queue[index];
       queue.staff_queue[index] = temp;
       index--;
     } else if (current.encounter_count == previous.encounter_count) {
-      if (current.arrival_order < previous.arrival_order) {
+      if (current.total_help_time < previous.total_help_time) {
         Staff temp = queue.staff_queue[index - 1];
         queue.staff_queue[index - 1] = queue.staff_queue[index];
         queue.staff_queue[index] = temp;
         index--;
+      } else if (current.total_help_time == previous.total_help_time) {
+        if (current.arrival_order < previous.arrival_order) {
+          Staff temp = queue.staff_queue[index - 1];
+          queue.staff_queue[index - 1] = queue.staff_queue[index];
+          queue.staff_queue[index] = temp;
+          index--;
+        } else {
+          break;
+        }
       } else {
         break;
       }
